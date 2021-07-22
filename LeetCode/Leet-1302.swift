@@ -1,3 +1,5 @@
+import Foundation
+
 public class TreeNode {
     public var val: Int
     public var left: TreeNode?
@@ -13,21 +15,19 @@ public class TreeNode {
 
 class Solution {
     func deepestLeavesSum(_ root: TreeNode?) -> Int {
-        var toVisited = [root]
-        var answer = 0
-        while !toVisited.isEmpty {
-            answer = 0
-            for _ in 0..<toVisited.count {
-                guard let node = toVisited.removeFirst() else { return 0 }
-                if let left = node.left {
-                    toVisited.append(left)
-                }
-                if let right = node.right {
-                    toVisited.append(right)
-                }
-                answer += node.val
-            }
+        var sumValueWithDepth = [Int: Int]()
+        dfs(root, 0, &sumValueWithDepth)
+        return sumValueWithDepth[sumValueWithDepth.keys.max() ?? 0] ?? 0
+    }
+    
+    func dfs(_ root: TreeNode?, _ depth: Int, _ sumValueWithDepth: inout [Int:Int]) {
+        guard let root = root else { return }
+        
+        if root.left == nil, root.right == nil {
+            sumValueWithDepth[depth] = sumValueWithDepth[depth] == nil ? root.val : sumValueWithDepth[depth]! + root.val
+            return
         }
-        return answer
+        dfs(root.left, depth+1, &sumValueWithDepth)
+        dfs(root.right, depth+1, &sumValueWithDepth)
     }
 }
