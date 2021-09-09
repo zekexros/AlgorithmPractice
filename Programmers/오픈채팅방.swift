@@ -1,13 +1,7 @@
 import Foundation
 
 func solution(_ record:[String]) -> [String] {
-//    enter: id님이 들어왔습니다 -> 배열에 저장
-//    leave: id님이 나갔습니다 -> 배열에 저장
-//    change: dict[id] = nick -> dict타입 업데이트
-//
-//    배열에 저장된 요소들의 id에 nickName삽입
-//
-//    끝
+
     let records = record.map { $0.components(separatedBy: " ") }
     var log = [String]()
     var nicknameWithID = [String : String]() // id: Nickname
