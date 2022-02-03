@@ -1,47 +1,57 @@
 import Foundation
 
-var dx = [-1, 0, 1, -1, 0, 1, -1, 0, 1]
-var dy = [1, 1, 1, 0, 0, 0, -1, -1, -1]
+var input = readLine()!.map { Int(String($0))! }
 
-func dfs(visited: inout [[Bool]], map: inout [[Int]], col: Int, row: Int) {
-    if visited[col][row] == true {
+var oneCount = input.filter { $0 == 1 }.count
+var zeroCount = input.count - oneCount
+
+func recursive(record: inout [Bool], sequence: [Int], index: Int, standard: Int, list: [Int] = []) {
+    if index >= record.count || sequence[index] != standard {
+        for i in list {
+            record[i] = true
+        }
         return
     }
     
-    visited[col][row] = true
-    
-    for k in 0...8 {
-        var row = (row + dx[k]), col = (col + dy[k])
-        if (0..<map[0].count) ~= row, (0..<map.count) ~= col, map[col][row] == 1 {
-            dfs(visited: &visited, map: &map, col: col, row: row)
-        }
-    }
-    
+    recursive(record: &record, sequence: sequence, index: index+1, standard: standard, list: list + [index])
 }
 
-while true {
-    var input = readLine()!.split(separator: " ").map { Int($0)! }
-    if input == [0, 0] {
-        break
-    }
-    var worldMap = [[Int]]()
-    var count = 0
-    for i in 0..<input[1] {
-        var column = readLine()!.split(separator: " ").map { Int($0)! }
-        worldMap.append(column)
-    }
-    var visited = worldMap.map { column in
-        column.map { _ in false }
-    }
+if oneCount == 0 || zeroCount == 0 {
+    print(0)
+} else {
+    var standard = 1
     
-    for i in 0..<worldMap.count {
-        for j in 0..<worldMap[0].count {
-            if visited[i][j] == false, worldMap[i][j] == 1 {
-                dfs(visited: &visited, map: &worldMap, col: i, row: j)
-                count += 1
-            }
+    var count1 = 0
+    var count2 = 0
+    
+    var record = input.map { num -> Bool in
+        if num == standard {
+            return false
+        } else {
+            return true
+        }
+    }
+    var record2 = record.map { !$0 }
+    
+    for i in 0..<input.count {
+        if record[i] == true {
+            continue
+        } else {
+            recursive(record: &record, sequence: input, index: i, standard: 1)
+            count1 += 1
         }
     }
     
-    print(count, separator: "", terminator: "\n")
+    for i in 0..<input.count {
+        if record2[i] == true {
+            continue
+        } else {
+            recursive(record: &record2, sequence: input, index: i, standard: 0)
+            count2 += 1
+        }
+    }
+
+    print(min(count1, count2))
 }
+
+
