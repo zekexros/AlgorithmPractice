@@ -1,22 +1,22 @@
 import Foundation
 
-func solution(_ number:[Int]) -> Int {
-  var combination = [[Int]]()
-  getCombination(number, 3, &combination)
-  return combination.filter { $0.reduce(0, +) == 0 }.count
-}
-
-func getCombination<T>(_ arr: [T], _ r: Int, _ res: inout [[T]], _ now: [T] = [T]()) {
-    let n = arr.count
-
-    guard n > 0 else { return }
-
-    if r == 0 {
-        res.append(now)
-    } else if n == r {
-        res.append(now + arr)
-    } else {
-        getCombination(Array(arr[1...]), r - 1, &res, now + [arr.first!])
-        getCombination(Array(arr[1...]), r, &res, now)
+func solution(_ food:[Int]) -> String {
+  var stack = [Int]()
+  var table = [Int]()
+  
+  for (index, count) in food.enumerated() {
+    if index == 0 || count == 1 {
+      continue
     }
+    
+    for _ in 0..<(count / 2) {
+      table.append(index)
+      stack.append(index)
+    }
+  }
+  table.append(0)
+  let reversedStack = stack.reversed()
+  let combinedTable = table + reversedStack
+  
+  return combinedTable.map { String($0) }.joined()
 }
