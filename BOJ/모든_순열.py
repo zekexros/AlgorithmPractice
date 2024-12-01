@@ -1,10 +1,23 @@
-import itertools
+N = int(input())
+elements = [i for i in range(1, N+1)]
+array = [False] * N
+answer = []
 
-value = int(input())
+def permutation(level):
+    if level == N:
+        print(' '.join(map(str, answer)))
+        return
+    
+    for i in range(0, N):
+        if array[i]:
+            continue
 
-arr = list(i for i in range(1, value + 1))
+        answer.append(elements[i])
+        array[i] = True
 
-nPr = list(itertools.permutations(arr, value))
+        permutation(level+1)
 
-for i in nPr:
-    print(' '.join(map(str, i)))
+        answer.pop()
+        array[i] = False
+    
+permutation(0)
