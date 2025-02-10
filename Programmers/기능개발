@@ -1,0 +1,30 @@
+def solution(progresses, speeds):
+    zipped = zip(progresses, speeds)
+    estimated_time = []
+    for progress, speed in zipped:
+        remain = 100 - progress
+        quotient, remainder = divmod(remain, speed)
+        if quotient == 0:
+            estimated_time.append(1)
+        elif remainder == 0:
+            estimated_time.append(quotient)
+        else:
+            estimated_time.append(quotient + 1)
+
+    temp = 0
+    answer = 0
+    answers = []
+    for index, time in enumerate(estimated_time):
+        if temp == 0:
+            temp = time
+            answer += 1
+        elif time > temp:
+            answers.append(answer)
+            temp = time
+            answer = 1
+        else:
+            answer += 1
+        
+        if index == len(estimated_time) - 1:
+            answers.append(answer)
+    return answers
